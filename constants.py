@@ -16,6 +16,9 @@ PLAYER_TURN_SPEED = 300  # Degrees per second
 PLAYER_SPEED = 200  # Movement speed
 PLAYER_SHOOT_SPEED = 500  # Shot speed
 PLAYER_SHOOT_COOLDOWN = 0.4  # seconds between shots
+PLAYER_ACCELERATION = 400  # Acceleration per second^2
+PLAYER_FRICTION = 0.99  # Friction factor per frame, 1.0 = no friction, <1.0 = some friction
+INVINCIBILITY_DURATION = 2.0  # seconds
 
 # Shot stats
 SHOT_RADIUS = 5  # Size of each shot

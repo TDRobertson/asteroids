@@ -11,6 +11,8 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0  # Player's facing direction
         self.shot_cooldown = 0  # Time until next shot allowed
+        self.velocity = pygame.Vector2(0, 0)  # Ensure velocity is initialized
+        self.acceleration = pygame.Vector2(0, 0)  # For acceleration-based movement
 
     def draw(self, screen):
         # Draw the player as a triangle (spaceship)
@@ -30,16 +32,33 @@ class Player(CircleShape):
         keys = pygame.key.get_pressed()
         self.shot_cooldown -= dt
 
+        # Acceleration logic
         if keys[pygame.K_w]:
-            self.move(dt)
-        if keys[pygame.K_s]:
-            self.move(-dt)
+            forward = pygame.Vector2(0, 1).rotate(self.rotation)
+            self.acceleration = forward * PLAYER_ACCELERATION
+        elif keys[pygame.K_s]:
+            backward = pygame.Vector2(0, -1).rotate(self.rotation)
+            self.acceleration = backward * PLAYER_ACCELERATION
+        else:
+            self.acceleration = pygame.Vector2(0, 0)
+
+        # Update velocity and apply friction
+        self.velocity += self.acceleration * dt
+        self.velocity *= PLAYER_FRICTION
+
+        # Update position
+        self.position += self.velocity * dt
+
+        # Rotation
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_SPACE]:
             self.shoot()
+
+        # Screen wrapping
+        self.wrap_position()
 
     def shoot(self):
         # Fire a shot if cooldown has elapsed
@@ -54,8 +73,3 @@ class Player(CircleShape):
     def rotate(self, dt):
         # Rotate the player
         self.rotation += PLAYER_TURN_SPEED * dt
-
-    def move(self, dt):
-        # Move the player forward or backward
-        forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * PLAYER_SPEED * dt

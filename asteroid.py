@@ -17,6 +17,7 @@ class Asteroid(CircleShape):
     def update(self, dt):
         # Move the asteroid according to its velocity and delta time
         self.position += self.velocity * dt
+        self.wrap_position()
 
     def split(self):
         # Remove this asteroid from all groups

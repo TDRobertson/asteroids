@@ -1,5 +1,6 @@
 # circleshape.py - Base class for circular game objects (player, asteroids, shots)
 import pygame  # For sprite and vector math
+from constants import *
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
@@ -24,3 +25,14 @@ class CircleShape(pygame.sprite.Sprite):
     def collides_with(self, other):
         # Check collision with another circular object
         return self.position.distance_to(other.position) <= self.radius + other.radius
+
+    def wrap_position(self):
+        # Wrap the object around the screen if its center is completely outside (using radius)
+        if self.position.x < -self.radius:
+            self.position.x = SCREEN_WIDTH + self.radius
+        elif self.position.x > SCREEN_WIDTH + self.radius:
+            self.position.x = -self.radius
+        if self.position.y < -self.radius:
+            self.position.y = SCREEN_HEIGHT + self.radius
+        elif self.position.y > SCREEN_HEIGHT + self.radius:
+            self.position.y = -self.radius

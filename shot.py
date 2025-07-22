@@ -16,3 +16,7 @@ class Shot(CircleShape):
     def update(self, dt):
         # Move the shot according to its velocity and delta time
         self.position += self.velocity * dt
+        # Remove the shot if it leaves the screen
+        if (self.position.x < -self.radius or self.position.x > SCREEN_WIDTH + self.radius or
+            self.position.y < -self.radius or self.position.y > SCREEN_HEIGHT + self.radius):
+            self.kill()
