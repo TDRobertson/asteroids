@@ -60,7 +60,7 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - `W`/`S`: Accelerate forward/backward (with inertia)
 - `A`/`D`: Rotate left/right
 - `Space`: Shoot
-- Close the window or press the close button to exit
+- Close the window or press use ctrl+c in the terminal to exit
 
 ## Gameplay Notes
 - **Lives:** You start with multiple lives. On collision with an asteroid, you lose a life and respawn at the center, invincible for a short time (flashing).
