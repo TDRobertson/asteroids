@@ -34,8 +34,10 @@ def main():
     # Sound effects
     explosion_sound = pygame.mixer.Sound("assets/150210__pumodi__explosion-3.mp3")  # Explosion 3 by pumodi
     blaster_sound = pygame.mixer.Sound("assets/retro-blaster-fire.wav")  # Retro Blaster Fire by astrand
+    player_explosion_sound = pygame.mixer.Sound("assets/SFX_Explosion_17.wav")  # Player explosion by jalastram
     blaster_sound.set_volume(0.5)
     explosion_sound.set_volume(0.5)
+    player_explosion_sound.set_volume(0.5)
 
     # Sprite groups for update/draw logic
     updatable = pygame.sprite.Group()
@@ -59,6 +61,8 @@ def main():
     lives = 3  # Number of lives
     invincible = False  # Is the player currently invincible?
     invincibility_timer = 0.0  # Time left for invincibility
+    player_dead = False  # Is the player currently dead (waiting to respawn)?
+    player_respawn_timer = 0.0  # Time left until player respawn
 
     # Asteroid limit logic
     max_asteroids = 10  # Starting limit
@@ -85,6 +89,18 @@ def main():
             if invincibility_timer <= 0:
                 invincible = False
 
+        # Handle player respawn timer
+        if player_dead:
+            player_respawn_timer -= dt
+            if player_respawn_timer <= 0:
+                # Respawn player at center and reset velocity/rotation
+                player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                player.velocity = pygame.Vector2(0, 0)
+                player.rotation = 0
+                invincible = True
+                invincibility_timer = INVINCIBILITY_DURATION
+                player_dead = False
+
         # Increase max asteroids over time
         asteroid_increase_timer += dt
         if asteroid_increase_timer > ASTEROID_INCREASE_INTERVAL:
@@ -97,18 +113,16 @@ def main():
 
         # Check for collisions between asteroids and player/shots
         for asteroid in asteroids:
-            if not invincible and asteroid.collides_with(player):
+            if not invincible and not player_dead and asteroid.collides_with(player):
                 lives -= 1
                 if lives <= 0:
                     print(f"Game over! Final score: {score}")
                     sys.exit()
                 else:
-                    # Respawn player at center and reset velocity/rotation
-                    player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-                    player.velocity = pygame.Vector2(0, 0)
-                    player.rotation = 0
-                    invincible = True
-                    invincibility_timer = INVINCIBILITY_DURATION
+                    # Play player explosion sound and start respawn timer
+                    player_explosion_sound.play()
+                    player_dead = True
+                    player_respawn_timer = player_explosion_sound.get_length()
             for shot in shots:
                 if asteroid.collides_with(shot):
                     shot.kill()  # Remove shot
@@ -125,11 +139,14 @@ def main():
 
         # Draw all drawable sprites
         for obj in drawable:
-            # Make the player flash while invincible
-            if obj is player and invincible:
-                # Flash: only draw if int(time * 10) is even
-                if int(invincibility_timer * 10) % 2 == 0:
-                    obj.draw(screen)
+            # Make the player flash while invincible, and hide if dead
+            if obj is player:
+                if not player_dead:
+                    if invincible:
+                        if int(invincibility_timer * 10) % 2 == 0:
+                            obj.draw(screen)
+                    else:
+                        obj.draw(screen)
             else:
                 obj.draw(screen)
 
