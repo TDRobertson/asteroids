@@ -34,6 +34,8 @@ class AsteroidField(pygame.sprite.Sprite):
         # Initialize the asteroid field and spawn timer
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
+        self.max_asteroids = 10  # Default, can be set from main
+        self.asteroids_group = None  # Should be set from main
 
     def spawn(self, radius, position, velocity):
         # Create a new asteroid at the given position and velocity
@@ -43,7 +45,10 @@ class AsteroidField(pygame.sprite.Sprite):
     def update(self, dt):
         # Update the spawn timer and spawn new asteroids as needed
         self.spawn_timer += dt
-        if self.spawn_timer > ASTEROID_SPAWN_RATE:
+        # Only spawn if under max_asteroids
+        if (self.spawn_timer > ASTEROID_SPAWN_RATE and
+            self.asteroids_group is not None and
+            len(self.asteroids_group) < self.max_asteroids):
             self.spawn_timer = 0
 
             # Spawn a new asteroid at a random edge

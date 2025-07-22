@@ -40,6 +40,11 @@ def main():
     invincible = False  # Is the player currently invincible?
     invincibility_timer = 0.0  # Time left for invincibility
 
+    # Asteroid limit logic
+    max_asteroids = 10  # Starting limit
+    asteroid_increase_timer = 0.0
+    ASTEROID_INCREASE_INTERVAL = 10.0  # seconds between increases
+
     # Set up font for score and lives display
     pygame.font.init()
     font = pygame.font.SysFont(None, 36)
@@ -59,6 +64,16 @@ def main():
             invincibility_timer -= dt
             if invincibility_timer <= 0:
                 invincible = False
+
+        # Increase max asteroids over time
+        asteroid_increase_timer += dt
+        if asteroid_increase_timer > ASTEROID_INCREASE_INTERVAL:
+            asteroid_increase_timer = 0
+            max_asteroids += 1
+
+        # Pass max_asteroids to AsteroidField
+        asteroid_field.max_asteroids = max_asteroids
+        asteroid_field.asteroids_group = asteroids
 
         # Check for collisions between asteroids and player/shots
         for asteroid in asteroids:
