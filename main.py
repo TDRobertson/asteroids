@@ -33,6 +33,11 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     dt = 0  # Delta time for frame updates
+    score = 0  # Initialize score
+
+    # Set up font for score display
+    pygame.font.init()
+    font = pygame.font.SysFont(None, 36)
 
     # Main game loop
     while True:
@@ -47,11 +52,16 @@ def main():
         # Check for collisions between asteroids and player/shots
         for asteroid in asteroids:
             if asteroid.collides_with(player):
-                print("Game over!")
+                print(f"Game over! Final score: {score}")
                 sys.exit()
             for shot in shots:
                 if asteroid.collides_with(shot):
                     shot.kill()  # Remove shot
+                    # Award points based on asteroid size
+                    if asteroid.radius <= ASTEROID_MIN_RADIUS:
+                        score += 100  # Smallest asteroid
+                    else:
+                        score += 50   # Larger asteroid
                     asteroid.split()  # Split asteroid or destroy
 
         # Clear the screen
@@ -60,6 +70,10 @@ def main():
         # Draw all drawable sprites
         for obj in drawable:
             obj.draw(screen)
+
+        # Render and display the score
+        score_surface = font.render(f"Score: {score}", True, (255, 255, 255))
+        screen.blit(score_surface, (10, 10))
 
         pygame.display.flip()  # Update the display
 
