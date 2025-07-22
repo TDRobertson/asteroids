@@ -8,6 +8,8 @@ from asteroid import Asteroid  # Asteroid class
 from asteroidfield import AsteroidField  # Asteroid field manager
 from shot import Shot  # Shot (bullet) class
 
+INVINCIBILITY_DURATION = 2.0  # seconds
+
 
 def main():
     # Initialize pygame and set up the display
@@ -34,8 +36,11 @@ def main():
 
     dt = 0  # Delta time for frame updates
     score = 0  # Initialize score
+    lives = 3  # Number of lives
+    invincible = False  # Is the player currently invincible?
+    invincibility_timer = 0.0  # Time left for invincibility
 
-    # Set up font for score display
+    # Set up font for score and lives display
     pygame.font.init()
     font = pygame.font.SysFont(None, 36)
 
@@ -49,11 +54,26 @@ def main():
         # Update all updatable sprites
         updatable.update(dt)
 
+        # Handle invincibility timer
+        if invincible:
+            invincibility_timer -= dt
+            if invincibility_timer <= 0:
+                invincible = False
+
         # Check for collisions between asteroids and player/shots
         for asteroid in asteroids:
-            if asteroid.collides_with(player):
-                print(f"Game over! Final score: {score}")
-                sys.exit()
+            if not invincible and asteroid.collides_with(player):
+                lives -= 1
+                if lives <= 0:
+                    print(f"Game over! Final score: {score}")
+                    sys.exit()
+                else:
+                    # Respawn player at center and reset velocity/rotation
+                    player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                    player.velocity = pygame.Vector2(0, 0)
+                    player.rotation = 0
+                    invincible = True
+                    invincibility_timer = INVINCIBILITY_DURATION
             for shot in shots:
                 if asteroid.collides_with(shot):
                     shot.kill()  # Remove shot
@@ -69,11 +89,20 @@ def main():
 
         # Draw all drawable sprites
         for obj in drawable:
-            obj.draw(screen)
+            # Make the player flash while invincible
+            if obj is player and invincible:
+                # Flash: only draw if int(time * 10) is even
+                if int(invincibility_timer * 10) % 2 == 0:
+                    obj.draw(screen)
+            else:
+                obj.draw(screen)
 
         # Render and display the score
         score_surface = font.render(f"Score: {score}", True, (255, 255, 255))
         screen.blit(score_surface, (10, 10))
+        # Render and display the lives
+        lives_surface = font.render(f"Lives: {lives}", True, (255, 255, 255))
+        screen.blit(lives_surface, (10, 50))
 
         pygame.display.flip()  # Update the display
 
