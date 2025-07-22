@@ -26,7 +26,7 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - `constants.py` - All game configuration constants
 
 ## Requirements
-- Python 3.10+ installed 
+- Python 3.10+ installed
 - [uv project and package manager](https://github.com/astral-sh/uv) (for dependency management and running scripts)
 - Access to a unix-like shell (e.g. zsh or bash)
 
@@ -70,6 +70,30 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - **Lumpy Asteroids:** Asteroids are drawn as irregular polygons for a more classic, jagged look.
 - **Accurate Collisions:** Player and asteroids use polygon-based collision detection (SAT) for precise and fair gameplay.
 - **Difficulty:** The game gets harder as more asteroids are allowed on screen over time.
+
+## Known Issues
+- **White line artifact:** Occasionally, a white line may randomly appear across the screen as asteroids wrap around. This is a known rendering artifact due to how polygons are drawn when wrapping and does not affect gameplay.
+
+## How to Play
+- Use the arrow keys to move the player
+- Use the spacebar to shoot
+- Use the w/s keys to accelerate forward/backward
+- Use the a/d keys to rotate left/right
+
+## Credits
+- [Pygame](https://www.pygame.org/) for the game engine
+- [uv](https://github.com/astral-sh/uv) for the package manager
+- [Python](https://www.python.org/) for the programming language
+- [Asteroids](https://en.wikipedia.org/wiki/Asteroids_(video_game)) for the game idea
+- [Asteroids (1979)](https://en.wikipedia.org/wiki/Asteroids_(video_game)) for the game idea
+
+### Background Music
+- Space Fighter Loop by Kevin MacLeod (incompetech.com) -- http://creativecommons.org/licenses/by/4.0/ -- Licensed under Creative Commons: By Attribution 4.0 License
+
+### Sound Effects
+- Retro Blaster Fire by astrand -- https://freesound.org/s/328011/ -- License: Creative Commons 0 # player shot
+- SFX_Explosion_17.wav by jalastram -- https://freesound.org/s/317760/ -- License: Attribution 4.0 # player explosion
+- Explosion 3 by pumodi -- https://freesound.org/s/150210/ -- License: Creative Commons 0 # asteroid explosion
 
 ## Notes
 - This project is intended for educational purposes and as a starting point for further development.

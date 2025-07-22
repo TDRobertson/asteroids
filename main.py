@@ -12,10 +12,30 @@ INVINCIBILITY_DURATION = 2.0  # seconds
 
 
 def main():
+
+    pygame.mixer.pre_init(44100, -16, 2, 2048)
     # Initialize pygame and set up the display
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+
+    # Set the window caption
+    pygame.display.set_caption("Asteroids")
+
+    # Set the window icon
+    #icon = pygame.image.load("assets/icon.png")
+    #pygame.display.set_icon(icon)
+
+    # Music
+    pygame.mixer.music.load("assets/Space_Fighter_Loop.mp3")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+
+    # Sound effects
+    explosion_sound = pygame.mixer.Sound("assets/150210__pumodi__explosion-3.mp3")  # Explosion 3 by pumodi
+    blaster_sound = pygame.mixer.Sound("assets/retro-blaster-fire.wav")  # Retro Blaster Fire by astrand
+    blaster_sound.set_volume(0.5)
+    explosion_sound.set_volume(0.5)
 
     # Sprite groups for update/draw logic
     updatable = pygame.sprite.Group()
@@ -32,7 +52,7 @@ def main():
     Player.containers = (updatable, drawable)
 
     # Create the player at the center of the screen
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, blaster_sound=blaster_sound)
 
     dt = 0  # Delta time for frame updates
     score = 0  # Initialize score
@@ -97,6 +117,7 @@ def main():
                         score += 100  # Smallest asteroid
                     else:
                         score += 50   # Larger asteroid
+                    explosion_sound.play()  # Play explosion sound
                     asteroid.split()  # Split asteroid or destroy
 
         # Clear the screen

@@ -6,13 +6,14 @@ from shot import Shot  # Shot (bullet) class
 
 
 class Player(CircleShape):
-    def __init__(self, x, y):
+    def __init__(self, x, y, blaster_sound=None):
         # Initialize player at (x, y) with a set radius
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0  # Player's facing direction
         self.shot_cooldown = 0  # Time until next shot allowed
         self.velocity = pygame.Vector2(0, 0)  # Ensure velocity is initialized
         self.acceleration = pygame.Vector2(0, 0)  # For acceleration-based movement
+        self.blaster_sound = blaster_sound  # Sound effect for shooting
 
     def draw(self, screen):
         # Draw the player as a triangle (spaceship)
@@ -59,7 +60,9 @@ class Player(CircleShape):
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_SPACE]:
-            self.shoot()
+            shot = self.shoot()
+            if shot and self.blaster_sound:
+                self.blaster_sound.play()
 
         # Screen wrapping
         self.wrap_position()
@@ -67,11 +70,10 @@ class Player(CircleShape):
     def shoot(self):
         # Fire a shot if cooldown has elapsed
         if self.shot_cooldown > 0:
-            return
+            return None
         self.shot_cooldown = PLAYER_SHOOT_COOLDOWN
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        # Ensure shot is used so linter does not complain
         return shot
 
     def rotate(self, dt):
