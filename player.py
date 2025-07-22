@@ -27,6 +27,10 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
 
+    def get_absolute_points(self):
+        # Return the triangle points for polygon collision
+        return [tuple(p) for p in self.triangle()]
+
     def update(self, dt):
         # Handle player input and update state
         keys = pygame.key.get_pressed()

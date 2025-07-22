@@ -11,8 +11,8 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - **Asteroid spawn cap**: the number of asteroids on screen is limited and increases over time for progressive difficulty
 - **Shots disappear at screen edge**: shots are removed when they leave the play area (no wrapping)
 - **Continuous asteroid spawning** from the edges
-- **Collision detection** between player, asteroids, and shots
 - **Lumpy asteroids**: asteroids are drawn as irregular polygons for a more classic, jagged look
+- **Accurate polygon-based collision detection**: player (triangle) and asteroids (lumpy polygons) use SAT for precise collisions
 - **Score display**: shooting asteroids gives points, larger asteroids are worth more
 - **Fully commented code** for clarity and learning
 
@@ -68,6 +68,7 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - **Asteroid Cap:** The number of asteroids on screen is limited (starts at 10 by default) and increases every 10 seconds.
 - **Screen Wrapping:** Player and asteroids wrap around the screen edges. Shots do not wrap and are removed when leaving the screen.
 - **Lumpy Asteroids:** Asteroids are drawn as irregular polygons for a more classic, jagged look.
+- **Accurate Collisions:** Player and asteroids use polygon-based collision detection (SAT) for precise and fair gameplay.
 - **Difficulty:** The game gets harder as more asteroids are allowed on screen over time.
 
 ## Notes

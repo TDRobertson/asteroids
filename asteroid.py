@@ -23,14 +23,14 @@ class Asteroid(CircleShape):
             points.append((x, y))
         return points
 
-    def draw(self, screen):
-        # Calculate the absolute positions of the lumpy points
+    def get_absolute_points(self):
         px = float(getattr(self.position, 'x', 0.0))
         py = float(getattr(self.position, 'y', 0.0))
-        abs_points = [
-            (px + x, py + y)
-            for (x, y) in self.lumpy_points
-        ]
+        return [(px + x, py + y) for (x, y) in self.lumpy_points]
+
+    def draw(self, screen):
+        # Calculate the absolute positions of the lumpy points
+        abs_points = self.get_absolute_points()
         pygame.draw.polygon(screen, "white", abs_points, 2)
 
     def update(self, dt):
