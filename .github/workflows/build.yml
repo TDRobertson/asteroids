@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: [3.10, 3.11]
+        python-version: [3.12.3]
 
     steps:
     - uses: actions/checkout@v4
@@ -28,13 +28,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install pygame pyinstaller
     
-    - name: Build executable
+    - name: Build executable (Windows)
+      if: runner.os == 'Windows'
       run: |
-        if [ "$RUNNER_OS" = "Windows" ]; then
-          pyinstaller --onefile --add-data "assets;assets" main.py
-        else
-          pyinstaller --onefile --add-data "assets:assets" main.py
-        fi
+        pyinstaller --onefile --add-data "assets;assets" main.py
+    
+    - name: Build executable (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        pyinstaller --onefile --add-data "assets:assets" main.py
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
