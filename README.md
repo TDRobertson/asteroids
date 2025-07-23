@@ -63,6 +63,22 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
    uv run main.py
    ```
 
+## Platform Notes
+
+### Windows
+- The first time you run the executable, Windows Defender or SmartScreen may warn you that the app is unrecognized or potentially unsafe. This is normal for new, unsigned apps built with tools like PyInstaller.
+- If you see a warning, click "More info" and then "Run anyway" to launch the game.
+- To avoid this warning in the future, you would need to sign the executable with a code-signing certificate (not required for personal or open source use).
+
+### macOS
+- The macOS build is for Intel (x86_64) Macs. Most modern Macs (2012+) can run these binaries.
+- On Apple Silicon (M1/M2) Macs, you may need to install Rosetta 2 to run Intel binaries:
+  ```sh
+  /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+  ```
+- Very old Macs (32-bit only, pre-2010) are not supported.
+- If you see an error like `Bad CPU type in executable`, it means the binary is not compatible with your Mac's CPU architecture.
+
 ## Controls
 - `W`/`S`: Accelerate forward/backward (with inertia)
 - `A`/`D`: Rotate left/right
