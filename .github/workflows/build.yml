@@ -34,18 +34,31 @@ jobs:
     - name: Build executable (Windows)
       if: runner.os == 'Windows'
       run: |
-        pyinstaller --onefile --add-data "assets;assets" main.py
+        # Use --onedir for better asset handling
+        pyinstaller --onedir --add-data "assets;assets" --hidden-import pygame --hidden-import pygame.mixer --hidden-import pygame.font main.py
+        # Create a zip file for distribution
+        cd dist
+        powershell Compress-Archive -Path "main" -DestinationPath "asteroids-windows.zip"
+        cd ..
     
     - name: Build executable (Unix)
       if: runner.os != 'Windows'
       run: |
-        pyinstaller --onefile --add-data "assets:assets" main.py
+        pyinstaller --onedir --add-data "assets:assets" --hidden-import pygame --hidden-import pygame.mixer --hidden-import pygame.font main.py
+        cd dist
+        zip -r asteroids-unix.zip main
+        cd ..
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: asteroids-${{ runner.os }}
-        path: dist/
+        path: |
+          dist/main.exe
+          dist/main
+          dist/asteroids-windows.zip
+          dist/asteroids-unix.zip
+          dist/
     
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
@@ -59,6 +72,7 @@ jobs:
           
           This release contains executables for:
           - Windows
+          - Linux
           - macOS
           
           Built from commit: ${{ github.sha }}
