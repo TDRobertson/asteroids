@@ -31,6 +31,13 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - Access to a unix-like shell (e.g. zsh or bash)
 
 ## How to Run
+
+### Option 1: Download Pre-built Executable (Recommended)
+1. Go to the [Releases](https://github.com/TDRobertson/asteroids/releases) page
+2. Download the executable for your platform (Windows, Linux, or macOS)
+3. Run the executable directly (no Python installation required)
+
+### Option 2: Run from Source
 1. Install uv:
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -79,6 +86,41 @@ This is a simple Asteroids-style arcade game implemented in Python using the Pyg
 - Use the spacebar to shoot
 - Use the w/s keys to accelerate forward/backward
 - Use the a/d keys to rotate left/right
+
+## For Developers
+
+### Creating a Release
+To create a new release with executables for all platforms:
+
+1. Make your changes and commit them:
+   ```bash
+   git add .
+   git commit -m "Your changes"
+   git push origin main
+   ```
+
+2. Create and push a tag (this triggers the automated build):
+   ```bash
+   git tag v1.0.0  # Use semantic versioning
+   git push origin v1.0.0
+   ```
+
+3. GitHub Actions will automatically:
+   - Build executables for Windows, Linux, and macOS
+   - Create a new release with the executables attached
+   - Tag the release with your version number
+
+### Building Locally
+To build an executable on your local machine:
+
+```bash
+# Install PyInstaller
+pip install pyinstaller
+
+# Build for your platform
+pyinstaller --onefile --add-data "assets:assets" main.py
+# On Windows, use: --add-data "assets;assets"
+```
 
 ## Credits
 - [Pygame](https://www.pygame.org/) for the game engine
