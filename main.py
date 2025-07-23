@@ -1,6 +1,7 @@
 # main.py - Main entry point for the Asteroids game
 # Imports
 import sys  # For system exit
+import os  # For file paths
 import pygame  # For game graphics and input
 from constants import *  # Game constants
 from player import Player  # Player class
@@ -10,6 +11,16 @@ from shot import Shot  # Shot (bullet) class
 
 INVINCIBILITY_DURATION = 2.0  # seconds
 
+# Resource path for assets
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def main():
 
@@ -27,14 +38,14 @@ def main():
     #pygame.display.set_icon(icon)
 
     # Music
-    pygame.mixer.music.load("assets/Space_Fighter_Loop.mp3")
+    pygame.mixer.music.load(resource_path("assets/Space_Fighter_Loop.mp3"))
     pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.play(-1)
 
     # Sound effects
-    explosion_sound = pygame.mixer.Sound("assets/150210__pumodi__explosion-3.mp3")  # Explosion 3 by pumodi
-    blaster_sound = pygame.mixer.Sound("assets/retro-blaster-fire.wav")  # Retro Blaster Fire by astrand
-    player_explosion_sound = pygame.mixer.Sound("assets/SFX_Explosion_17.wav")  # Player explosion by jalastram
+    explosion_sound = pygame.mixer.Sound(resource_path("assets/150210__pumodi__explosion-3.mp3"))  # Explosion 3 by pumodi
+    blaster_sound = pygame.mixer.Sound(resource_path("assets/retro-blaster-fire.wav"))  # Retro Blaster Fire by astrand
+    player_explosion_sound = pygame.mixer.Sound(resource_path("assets/SFX_Explosion_17.wav"))  # Player explosion by jalastram
     blaster_sound.set_volume(0.5)
     explosion_sound.set_volume(0.5)
     player_explosion_sound.set_volume(0.5)
