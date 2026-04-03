@@ -1,6 +1,6 @@
 # Asteroids
 
-> Classic arcade game rebuilt in Python — expanded well beyond the course assignment that started it.
+> Classic arcade game rebuilt in Python.
 
 This project began as a structured assignment in Boot.dev's Python course: build a functional Asteroids clone. The course covered the basics — player movement, rotation, shooting, and asteroid spawning and splitting. I kept going. The shipped version adds acceleration-based physics with friction and inertia, SAT polygon collision detection for precise shape-vs-shape hit testing, a full audio system with background music and three independently controlled sound effects, a progressive difficulty system with a dynamic spawn cap, multiple lives with respawn invincibility, and a CI/CD pipeline that builds and releases cross-platform executables for Windows, Linux, and macOS on every version tag push.
 
